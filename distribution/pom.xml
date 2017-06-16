@@ -20,7 +20,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>org.membrane-soa</groupId>
+		<groupId>io.hops</groupId>
 		<artifactId>service-proxy-parent</artifactId>
 		<relativePath>../pom.xml</relativePath>
 		<version>4.4.3-SNAPSHOT</version>
@@ -39,11 +39,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbynet</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
