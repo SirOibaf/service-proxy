@@ -400,20 +400,15 @@
 	</dependencyManagement>
 
 
-<!--	<repositories>
-		<repository>
-			<id>com.springsource.repository.bundles.external</id>
-			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-			<url>http://repository.springsource.com/maven/bundles/external</url>
-		</repository>
-		<repository>
-			<id>predic8-releases</id>
-			<url>http://repository.membrane-soa.org/content/groups/public</url>
-		</repository>
-	</repositories>-->
-
-
 	<build>
+    <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh-external</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
+	  
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -737,14 +732,33 @@
 		</profile>
 	</profiles>
 
-	<distributionManagement>
-		<repository>
-			<id>predic8-releases</id>
-			<url>http://repository.membrane-soa.org/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>predic8-snapshots</id>
-			<url>http://repository.membrane-soa.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+  <distributionManagement>
+     <repository>
+            <id>sics-release-repository</id>
+            <name>SICS Repository</name>
+            <url>scpexe://kompics.i.sics.se/home/maven/repository</url>
+        </repository>
+        <downloadUrl>http://kompics.sics.se/maven/repository</downloadUrl>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>sics-release</id>
+      <name>SICS Release Repository</name>
+      <url>http://kompics.sics.se/maven/repository</url>
+    </repository>
+    <repository>
+      <id>${distMgmtSnapshotsId}</id>
+      <name>${distMgmtSnapshotsName}</name>
+      <url>${distMgmtSnapshotsUrl}</url>
+    </repository>
+    <repository>
+      <id>repository.jboss.org</id>
+      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
 </project>
