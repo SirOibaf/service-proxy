@@ -73,24 +73,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.predic8</groupId>
-			<artifactId>soa-model-core</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.httpcomponents</groupId>
-					<artifactId>httpclient</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>jcl-over-slf4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.predic8</groupId>
-			<artifactId>xmlbeautifier</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>
@@ -157,7 +139,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.membrane-soa</groupId>
+			<groupId>io.hops</groupId>
 			<artifactId>service-proxy-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -206,9 +188,6 @@
 				<configuration>
 					<source>${javac.source}</source>
 					<target>${javac.target}</target>
-<!--					<annotationProcessors>
-						<annotationProcessor>com.predic8.membrane.annot.SpringConfigurationXSDGeneratingAnnotationProcessor</annotationProcessor>
-					</annotationProcessors>-->
 				</configuration>
 			</plugin>
 
