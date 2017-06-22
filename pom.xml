@@ -609,6 +609,10 @@
       <name>SICS Repository</name>
       <url>scpexe://kompics.i.sics.se/home/maven/repository</url>
     </repository>
+    <snapshotRepository>
+      <id>sics-snapshot-repository</id>
+      <url>scpexe://kompics.i.sics.se/home/maven/snapshotrepository</url>
+    </snapshotRepository>
     <downloadUrl>http://kompics.sics.se/maven/repository</downloadUrl>
   </distributionManagement>
 
@@ -619,9 +623,9 @@
       <url>http://kompics.sics.se/maven/repository</url>
     </repository>
     <repository>
-      <id>${distMgmtSnapshotsId}</id>
-      <name>${distMgmtSnapshotsName}</name>
-      <url>${distMgmtSnapshotsUrl}</url>
+      <id>sics-snapshot</id>
+      <name>SICS Snapshot Repository</name>
+      <url>http://kompics.sics.se/maven/snapshotrepository</url>
     </repository>
     <repository>
       <id>repository.jboss.org</id>

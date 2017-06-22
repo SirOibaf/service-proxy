@@ -35,11 +35,6 @@ public class ClasspathSchemaResolver implements SchemaResolver {
 		return is;
 	}
 
-	@Override
-	public void observeChange(String url, Consumer<InputStream> consumer) throws ResourceRetrievalException {
-		throw new RuntimeException("Not implemented");
-	}
-
 	private String normalize(String url) {
 		if (url.startsWith("classpath:"))
 			url = url.substring(10);

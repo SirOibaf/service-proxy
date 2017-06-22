@@ -119,17 +119,6 @@ public class HTTPSchemaResolver implements SchemaResolver {
         }
     }
 
-    @Override
-    public void observeChange(String url, Consumer<InputStream> consumer) throws ResourceRetrievalException {
-        watchedUrlMd5s.put(url,"");
-        consumerForUrls.put(url,consumer);
-        if(httpWatcher == null){
-            httpWatcher = new Thread(httpWatchJob);
-        }
-        if(!httpWatcher.isAlive()){
-            httpWatcher.start();
-        }
-    }
 
     @Override
     public List<String> getChildren(String url) {

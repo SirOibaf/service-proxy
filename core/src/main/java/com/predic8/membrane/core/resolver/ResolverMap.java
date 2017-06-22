@@ -21,13 +21,10 @@ import java.net.URI;
 import java.security.InvalidParameterException;
 import java.util.List;
 
-import com.predic8.membrane.core.util.functionalInterfaces.Consumer;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
 import com.google.common.base.Objects;
-import com.predic8.membrane.core.util.LSInputImpl;
-import com.predic8.xml.util.ExternalResolver;
 
 /**
  * A ResolverMap consists of a list of {@link SchemaResolver}s.
@@ -178,14 +175,6 @@ public class ResolverMap implements Cloneable, Resolver {
 		}
 	}
 
-	@Override
-	public void observeChange(String uri, Consumer<InputStream> consumer) throws ResourceRetrievalException {
-		try {
-			getSchemaResolver(uri).observeChange(uri,consumer);
-		} catch (ResourceRetrievalException e) {
-			throw e;
-		}
-	}
 
 	public List<String> getChildren(String uri) throws FileNotFoundException {
 		return getSchemaResolver(uri).getChildren(uri);
@@ -199,61 +188,61 @@ public class ResolverMap implements Cloneable, Resolver {
 		return getSchemaResolver("file:");
 	}
 
-	public LSResourceResolver toLSResourceResolver() {
-		return new LSResourceResolver() {
-			@Override
-			public LSInput resolveResource(String type, String namespaceURI,
-					String publicId, String systemId, String baseURI) {
-				if (systemId == null)
-					return null;
-				try {
-					if (!systemId.contains("://"))
-						systemId = new URI(baseURI).resolve(systemId).toString();
-					return new LSInputImpl(publicId, systemId, resolve(systemId));
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-		};
-	}
+//	public LSResourceResolver toLSResourceResolver() {
+//		return new LSResourceResolver() {
+//			@Override
+//			public LSInput resolveResource(String type, String namespaceURI,
+//					String publicId, String systemId, String baseURI) {
+//				if (systemId == null)
+//					return null;
+//				try {
+//					if (!systemId.contains("://"))
+//						systemId = new URI(baseURI).resolve(systemId).toString();
+//					return new LSInputImpl(publicId, systemId, resolve(systemId));
+//				} catch (Exception e) {
+//					throw new RuntimeException(e);
+//				}
+//			}
+//		};
+//	}
 
-	public ExternalResolverConverter toExternalResolver() {
-		return new ExternalResolverConverter();
-	}
-
-	public class ExternalResolverConverter {
-
-		public ExternalResolver toExternalResolver() {
-			return new ExternalResolver() {
-				@Override
-				public InputStream resolveAsFile(String filename, String baseDir) {
-					try {
-						if(baseDir != null) {
-							return ResolverMap.this.resolve(combine(baseDir, filename));
-						}
-						return ResolverMap.this.resolve(filename);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-				}
-
-				@Override
-				protected InputStream resolveViaHttp(Object url) {
-					try {
-						String url2 = (String) url;
-						int q = url2.indexOf('?');
-						if (q == -1)
-							url2 = url2.replaceAll("/[^/]+/\\.\\./", "/");
-						else
-							url2 = url2.substring(0, q).replaceAll("/[^/]+/\\.\\./", "/") + url2.substring(q);
-
-						return getSchemaResolver(url2).resolve(url2);
-					} catch (ResourceRetrievalException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			};
-		}
-
-	}
+//	public ExternalResolverConverter toExternalResolver() {
+//		return new ExternalResolverConverter();
+//	}
+//
+//	public class ExternalResolverConverter {
+//
+//		public ExternalResolver toExternalResolver() {
+//			return new ExternalResolver() {
+//				@Override
+//				public InputStream resolveAsFile(String filename, String baseDir) {
+//					try {
+//						if(baseDir != null) {
+//							return ResolverMap.this.resolve(combine(baseDir, filename));
+//						}
+//						return ResolverMap.this.resolve(filename);
+//					} catch (Exception e) {
+//						throw new RuntimeException(e);
+//					}
+//				}
+//
+//				@Override
+//				protected InputStream resolveViaHttp(Object url) {
+//					try {
+//						String url2 = (String) url;
+//						int q = url2.indexOf('?');
+//						if (q == -1)
+//							url2 = url2.replaceAll("/[^/]+/\\.\\./", "/");
+//						else
+//							url2 = url2.substring(0, q).replaceAll("/[^/]+/\\.\\./", "/") + url2.substring(q);
+//
+//						return getSchemaResolver(url2).resolve(url2);
+//					} catch (ResourceRetrievalException e) {
+//						throw new RuntimeException(e);
+//					}
+//				}
+//			};
+//		}
+//
+//	}
 }
