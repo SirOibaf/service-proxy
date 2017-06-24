@@ -158,16 +158,20 @@
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
         <version>${jackson.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
         <version>${jackson.version}</version>
+        <scope>provided</scope>
+
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${jackson.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>log4j</groupId>
@@ -207,6 +211,7 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>16.0.1</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>com.google.code.findbugs</groupId>
@@ -235,21 +240,16 @@
         <artifactId>xmlunit</artifactId>
         <version>1.6</version>
       </dependency>
-      <!--			<dependency>
-        <groupId>org.apache.derby</groupId>
-        <artifactId>derbynet</artifactId>
-        <version>10.12.1.1</version>
-      </dependency>-->
-      <dependency>
+      <!--      <dependency>
         <groupId>com.sun.xml.ws</groupId>
         <artifactId>jaxws-rt</artifactId>
         <version>${jaxws.version}</version>
-      </dependency>
-      <dependency>
+      </dependency>-->
+      <!--      <dependency>
         <groupId>com.sun.xml.ws</groupId>
         <artifactId>jaxws-tools</artifactId>
         <version>${jaxws.version}</version>
-      </dependency>
+      </dependency>-->
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
@@ -292,16 +292,16 @@
           </exclusion>
         </exclusions>
       </dependency>
-      <dependency>
+      <!--      <dependency>
         <groupId>com.google.http-client</groupId>
-        <artifactId>google-http-client-jackson2</artifactId> <!-- note the 2 at the end -->
+        <artifactId>google-http-client-jackson2</artifactId>  note the 2 at the end 
         <version>1.21.0</version>
-      </dependency>
-      <dependency>
+      </dependency>-->
+      <!--      <dependency>
         <groupId>javax.mail</groupId>
         <artifactId>mail</artifactId>
         <version>1.4.7</version>
-      </dependency>
+      </dependency>-->
       <dependency>
         <groupId>org.apache.aries.blueprint</groupId>
         <artifactId>blueprint-parser</artifactId>
@@ -336,6 +336,7 @@
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcpkix-jdk15on</artifactId>
         <version>1.54</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
