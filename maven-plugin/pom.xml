@@ -22,7 +22,7 @@
     <url>http://membrane-soa.org/service-proxy/</url>
 
     <parent>
-        <groupId>org.membrane-soa</groupId>
+        <groupId>io/hops</groupId>
         <artifactId>service-proxy-parent</artifactId>
         <relativePath>../pom.xml</relativePath>
         <version>4.4.3-SNAPSHOT</version>

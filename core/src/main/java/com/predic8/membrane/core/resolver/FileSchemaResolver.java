@@ -76,31 +76,6 @@ public class FileSchemaResolver implements SchemaResolver {
 		}
 	}
 
-	@Override
-	public void observeChange(String url, Consumer<InputStream> consumer) throws ResourceRetrievalException {
-		url = Paths.get(normalize(url)).toAbsolutePath().toString();
-		if(watchService == null){
-			try {
-				watchService = FileSystems.getDefault().newWatchService();
-			} catch (IOException ignored) {
-			}
-		}
-		Path path = Paths.get(url).getParent();
-		WatchKey watchKey = null;
-		try {
-			watchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-		} catch (IOException ignored) {
-		}
-		watchServiceForFile.put(url,watchKey);
-		watchedFiles.put(url,consumer);
-
-		if(fileWatcher == null){
-			fileWatcher = new Thread(fileWatchJob);
-		}
-		if(!fileWatcher.isAlive()){
-			fileWatcher.start();
-		}
-	}
 
 	public static String normalize(String uri) {
 		if(uri.startsWith("file:///")) {

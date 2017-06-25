@@ -29,10 +29,6 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.predic8.beautifier.HtmlBeautifierFormatter;
-import com.predic8.beautifier.PlainBeautifierFormatter;
-import com.predic8.beautifier.XMLBeautifier;
-import com.predic8.beautifier.XMLBeautifierFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,32 +44,6 @@ public class TextUtil {
 		replace = new String[] { ".*",   ".",  "\\.",  "\\\\",   "\\(",   "\\)",   "\\+",   "\\|",  "\\^",   "\\$",    "\\%",   "\\@"   };
 	}
 
-
-	public static String formatXML(Reader reader) {
-		return formatXML(reader, false);
-	}
-
-	public static String formatXML(Reader reader, boolean asHTML) {
-		StringWriter out = new StringWriter();
-
-		try {
-			XMLBeautifierFormatter formatter = asHTML ? new HtmlBeautifierFormatter(out, 0) : new PlainBeautifierFormatter(out, 0);
-			XMLBeautifier beautifier = new XMLBeautifier(formatter);
-			beautifier.parse(reader);
-		}
-		catch (Exception e){
-			log.error("", e);
-		} finally {
-			try {
-				out.close();
-				reader.close();
-			} catch (IOException e) {
-				log.error("", e);
-			}
-		}
-		return out.toString();
-
-	}
 
 	public static boolean isNullOrEmpty(String str) {
 		return str == null || str.length() == 0;

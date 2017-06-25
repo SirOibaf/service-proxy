@@ -384,33 +384,33 @@ public class ApiManagementConfiguration {
                 return;
             }
             parseAndConstructConfiguration(is);
-            try {
-                getResolver().observeChange(newLocation, new Consumer<InputStream>() {
-                    @Override
-                    public void call(InputStream inputStream) {
-                        log.info("Loading configuration from [" + newLocation + "]");
-                        if (!getContextLost()) {
-                            try {
-                                parseAndConstructConfiguration(inputStream);
-                                getResolver().observeChange(newLocation, this);
-                            } catch (ResourceRetrievalException ignored) {
-                            } catch (IOException ignored) {
-                            }
-                        }
-                    }
-                });
-            } catch (Exception warn) {
-                URL url = null;
-                try {
-                    url = new URL(newLocation);
-                } catch (MalformedURLException ignored) {
-                }
-                String schema = "";
-                if (url != null) {
-                    schema = url.getProtocol();
-                }
-                log.warn("Could not observe AMC location for " + schema);
-            }
+//            try {
+//                getResolver().observeChange(newLocation, new Consumer<InputStream>() {
+//                    @Override
+//                    public void call(InputStream inputStream) {
+//                        log.info("Loading configuration from [" + newLocation + "]");
+//                        if (!getContextLost()) {
+//                            try {
+//                                parseAndConstructConfiguration(inputStream);
+//                                getResolver().observeChange(newLocation, this);
+//                            } catch (ResourceRetrievalException ignored) {
+//                            } catch (IOException ignored) {
+//                            }
+//                        }
+//                    }
+//                });
+//            } catch (Exception warn) {
+//                URL url = null;
+//                try {
+//                    url = new URL(newLocation);
+//                } catch (MalformedURLException ignored) {
+//                }
+//                String schema = "";
+//                if (url != null) {
+//                    schema = url.getProtocol();
+//                }
+//                log.warn("Could not observe AMC location for " + schema);
+//            }
         }
     }
 
