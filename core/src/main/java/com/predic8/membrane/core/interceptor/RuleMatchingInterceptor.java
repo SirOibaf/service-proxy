@@ -30,6 +30,7 @@ import com.predic8.membrane.core.rules.NullRule;
 import com.predic8.membrane.core.rules.ProxyRule;
 import com.predic8.membrane.core.rules.Rule;
 import com.predic8.membrane.core.transport.http.AbstractHttpHandler;
+import java.net.InetAddress;
 
 public class RuleMatchingInterceptor extends AbstractInterceptor {
 
@@ -83,8 +84,11 @@ public class RuleMatchingInterceptor extends AbstractInterceptor {
 		String uri = request.getUri();
 		String version = request.getVersion();
 		int port = handler.isMatchLocalPort() ? handler.getLocalPort() : -1;
-		String localIP = handler.getLocalAddress().getHostAddress();
-
+    InetAddress handlerIp = handler.getLocalAddress();
+    String localIP = "127.0.0.1";
+    if (handlerIp != null) {
+      localIP = 		handlerIp.getHostAddress();
+    }
 		// match it
 		Rule rule = router.getRuleManager().getMatchingRule(hostHeader, method, uri, version, port, localIP);
 		if (rule != null) {
