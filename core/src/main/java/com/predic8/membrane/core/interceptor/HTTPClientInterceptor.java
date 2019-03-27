@@ -84,6 +84,13 @@ public class HTTPClientInterceptor extends AbstractInterceptor {
 		hc.setStreamPumpStats(getRouter().getStatistics().getStreamPumpStats());
 	}
 
+	public void init(Router router, HttpClient httpClient) throws Exception {
+		super.init(router);
+
+		hc = httpClient;
+		hc.setStreamPumpStats(getRouter().getStatistics().getStreamPumpStats());
+	}
+
 
 	public boolean isFailOverOn5XX() {
 		return failOverOn5XX;

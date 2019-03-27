@@ -372,10 +372,8 @@ public class HttpClient {
 		return res;
 	}
 
-	public static void setupConnectionForwarding(Exchange exc, final Connection con, final String protocol, StreamPump.StreamPumpStats streamPumpStats) throws SocketException {
-//		final HttpServerHandler hsr = (HttpServerHandler)exc.getHandler();
-		final AbstractHttpHandler hsr = exc.getHandler();
-//		String source = hsr.getSourceSocket().getRemoteSocketAddress().toString();
+	public void setupConnectionForwarding(Exchange exc, final Connection con, final String protocol, StreamPump.StreamPumpStats streamPumpStats) throws SocketException {
+		final HttpServerHandler hsr = (HttpServerHandler)exc.getHandler();
 		String source = hsr.getRemoteAddress();
 		String dest = con.toString();
 		final StreamPump a;
@@ -393,12 +391,7 @@ public class HttpClient {
 			b = new StreamPump(con.in, hsr.getSrcOut(), streamPumpStats, protocol + " " + source + " <- " + dest, exc.getRule());
 		}
 
-    if (hsr instanceof HttpServerHandler) {
-      HttpServerHandler hsr2 = (HttpServerHandler) hsr;
-      hsr2.getSourceSocket().setSoTimeout(0);
-    }
-
-		exc.addExchangeViewerListener(new AbstractExchangeViewerListener() {
+  	exc.addExchangeViewerListener(new AbstractExchangeViewerListener() {
 
 			@Override
 			public void setExchangeFinished() {
