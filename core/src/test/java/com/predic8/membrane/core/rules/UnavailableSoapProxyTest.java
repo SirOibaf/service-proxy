@@ -39,7 +39,7 @@ public class UnavailableSoapProxyTest {
 		HttpClientConfiguration httpClientConfig = new HttpClientConfiguration();
 		httpClientConfig.setMaxRetries(1);
 		r.setHttpClientConfig(httpClientConfig);
-		r.setHotDeploy(false);
+//		r.setHotDeploy(false);
 		r.setRetryInit(true);
 
 		sp = new SOAPProxy();
@@ -58,7 +58,7 @@ public class UnavailableSoapProxyTest {
 		sp2.setPort(2001);
 		sp2.setWsdl("http://www.thomas-bayer.com/axis2/services/BLZService?wsdl");
 		r2 = new Router();
-		r2.setHotDeploy(false);
+//		r2.setHotDeploy(false);
 		r2.getRules().add(sp2);
 		// r2 will be started during the test
 

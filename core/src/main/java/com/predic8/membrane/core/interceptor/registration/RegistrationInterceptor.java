@@ -39,8 +39,9 @@ public class RegistrationInterceptor extends AbstractInterceptor {
     @Override
     public void init(Router router) throws Exception {
         super.init(router);
-        userDataProvider = router.getBeanFactory().getBean(JdbcUserDataProvider.class);
-        userDataProvider.init(router);
+        // Commented out as we don't want to bring spring dependencies to Hopsworks
+        //userDataProvider = router.getBeanFactory().getBean(JdbcUserDataProvider.class);
+        //userDataProvider.init(router);
     }
 
     @Override

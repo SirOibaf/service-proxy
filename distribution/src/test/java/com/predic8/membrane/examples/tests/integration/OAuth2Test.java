@@ -92,6 +92,6 @@ public class OAuth2Test {
 
     @After
     public void tearDown() throws Exception {
-        router.stopAll();
+        //router.stopAll();
     }
 }

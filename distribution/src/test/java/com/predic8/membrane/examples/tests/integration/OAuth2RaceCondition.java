@@ -57,7 +57,7 @@ public class OAuth2RaceCondition {
     @After
     public void tearDown() throws MalformedURLException {
         server.stop();
-        client.stopAll();
+        //client.stopAll();
     }
 
     @Test
@@ -132,7 +132,7 @@ public class OAuth2RaceCondition {
         try(CloseableHttpResponse followGetRes = (CloseableHttpResponse) client.execute(followGet)) {
             assertEquals(200, followGetRes.getStatusLine().getStatusCode());
         }
-        this.client.stopAll();
+        //this.client.stopAll();
         this.client = HttpRouter.init(System.getProperty("user.dir") + "\\src\\test\\resources\\OAuth2\\client.xml");
     }
 

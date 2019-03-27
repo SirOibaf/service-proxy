@@ -32,7 +32,7 @@ public class WsaEndpointRewriterInterceptor extends AbstractInterceptor {
 	}
 
 	private DecoupledEndpointRegistry getRegistry() {
-		return getRouter().getBeanFactory().getBean(DecoupledEndpointRegistry.class);
+		return null;
 	}
 
 	@Override

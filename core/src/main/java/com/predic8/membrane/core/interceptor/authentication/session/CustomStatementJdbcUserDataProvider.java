@@ -57,13 +57,15 @@ public class CustomStatementJdbcUserDataProvider implements  UserDataProvider {
         if(datasource != null)
             return;
 
-        Map<String, DataSource> beans = router.getBeanFactory().getBeansOfType(DataSource.class);
+        /* Commented out as we don't want to bring spring dependency to Hopsworks
+         Map<String, DataSource> beans = router.getBeanFactory().getBeansOfType(DataSource.class);
 
         DataSource[] datasources = beans.values().toArray(new DataSource[0]);
         if(datasources.length > 0)
             datasource = datasources[0];
         else
-            throw new RuntimeException("No datasource found - specifiy a DataSource bean in your Membrane configuration");
+          */
+        throw new RuntimeException("No datasource found - specifiy a DataSource bean in your Membrane configuration");
     }
 
     @Override

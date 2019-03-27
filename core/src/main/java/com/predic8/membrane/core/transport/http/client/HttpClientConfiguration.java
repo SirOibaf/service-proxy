@@ -19,13 +19,9 @@ import com.predic8.membrane.annot.MCAttribute;
 import com.predic8.membrane.annot.MCChildElement;
 import com.predic8.membrane.annot.MCElement;
 import com.predic8.membrane.core.config.security.SSLParser;
-import com.predic8.membrane.core.config.spring.BaseLocationApplicationContext;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 @MCElement(name="httpClientConfig")
-public class HttpClientConfiguration implements ApplicationContextAware {
+public class HttpClientConfiguration {
 
 	private int maxRetries = 5;
 	private ConnectionConfiguration connection = new ConnectionConfiguration();
@@ -90,12 +86,6 @@ public class HttpClientConfiguration implements ApplicationContextAware {
 	@MCChildElement(order=4, allowForeign = true)
 	public void setSslParser(SSLParser sslParser) {
 		this.sslParser = sslParser;
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		if (applicationContext instanceof BaseLocationApplicationContext)
-			setBaseLocation(((BaseLocationApplicationContext)applicationContext).getBaseLocation());
 	}
 
 	public String getBaseLocation() {

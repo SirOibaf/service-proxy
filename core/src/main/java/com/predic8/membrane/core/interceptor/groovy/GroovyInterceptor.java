@@ -88,7 +88,7 @@ public class GroovyInterceptor extends AbstractInterceptor {
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("exc", exc);
 		parameters.put("flow", flow);
-		parameters.put("spring", router.getBeanFactory());
+		//parameters.put("spring", router.getBeanFactory());
 		Object res = null;
 		try {
 			 res = script.apply(parameters);

@@ -18,32 +18,19 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.predic8.membrane.annot.bean.MCUtil;
-import com.predic8.membrane.core.jmx.JmxExporter;
-import com.predic8.membrane.core.jmx.JmxRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.Lifecycle;
-import org.springframework.context.support.AbstractRefreshableApplicationContext;
 
 import com.predic8.membrane.annot.MCAttribute;
 import com.predic8.membrane.annot.MCChildElement;
 import com.predic8.membrane.annot.MCElement;
 import com.predic8.membrane.annot.MCMain;
 import com.predic8.membrane.core.RuleManager.RuleDefinitionSource;
-import com.predic8.membrane.core.config.spring.BaseLocationApplicationContext;
-import com.predic8.membrane.core.config.spring.TrackingApplicationContext;
 import com.predic8.membrane.core.config.spring.TrackingFileSystemXmlApplicationContext;
 import com.predic8.membrane.core.exchangestore.ExchangeStore;
 import com.predic8.membrane.core.exchangestore.LimitedMemoryExchangeStore;
@@ -52,7 +39,6 @@ import com.predic8.membrane.core.interceptor.Interceptor;
 import com.predic8.membrane.core.interceptor.administration.AdminConsoleInterceptor;
 import com.predic8.membrane.core.resolver.ResolverMap;
 import com.predic8.membrane.core.rules.Rule;
-import com.predic8.membrane.core.rules.ServiceProxy;
 import com.predic8.membrane.core.transport.Transport;
 import com.predic8.membrane.core.transport.http.HttpServerThreadFactory;
 import com.predic8.membrane.core.transport.http.HttpTransport;
@@ -82,18 +68,10 @@ import com.predic8.membrane.core.util.URIFactory;
 		outputName="router-conf.xsd",
 		targetNamespace="http://membrane-soa.org/proxies/1/")
 @MCElement(name="router")
-public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware {
+public class Router {
 
 	private static final Logger log = LoggerFactory.getLogger(Router.class.getName());
 
-	/**
-	 * In case more than one <router hotDeploy="true" /> starts within the same
-	 * app context, we track them here, so they start only one
-	 * HotDeploymentThread.
-	 */
-	protected static final HashSet<ApplicationContext> hotDeployingContexts = new HashSet<ApplicationContext>();
-
-	private ApplicationContext beanFactory;
 	private String baseLocation;
 
 	protected RuleManager ruleManager = new RuleManager();
@@ -103,12 +81,10 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 	protected DNSCache dnsCache = new DNSCache();
 	protected ExecutorService backgroundInitializator =
 			Executors.newSingleThreadExecutor(new HttpServerThreadFactory("Router Background Initializator"));
-	protected HotDeploymentThread hdt;
 	protected URIFactory uriFactory = new URIFactory(false);
 	protected Statistics statistics = new Statistics();
 	protected String jmxRouterName;
 
-	private boolean hotDeploy = true;
 	private boolean running;
 
 	private int retryInitInterval = 5 * 60 * 1000; // 5 minutes
@@ -146,13 +122,6 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 		beanFactory.start();
 
 		return (Router) beanFactory.getBean("router");
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		beanFactory = applicationContext;
-		if (applicationContext instanceof BaseLocationApplicationContext)
-			setBaseLocation(((BaseLocationApplicationContext)applicationContext).getBaseLocation());
 	}
 
 	public RuleManager getRuleManager() {
@@ -216,12 +185,6 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 			transport.closeAll();
 	}
 
-	public void shutdownAll() throws IOException{
-		for(String s : this.getBeanFactory().getBeanNamesForType(Router.class)){
-			((Router) this.getBeanFactory().getBean(s)).shutdown();
-		}
-	}
-
 	/**
 	 * Closes all ports (if any were opened), but does not wait for running exchanges to complete.
 	 *
@@ -257,27 +220,15 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 		transport.init(this);
 	}
 
-	@Override
 	public void start() {
 		try {
-			if (transport == null && beanFactory != null && beanFactory.getBeansOfType(Transport.class).values().size() > 0)
-				throw new RuntimeException("unclaimed transport detected. - please migrate to 4.0");
 			if (exchangeStore == null)
 				exchangeStore = new LimitedMemoryExchangeStore();
 			if (transport == null)
 				transport = new HttpTransport();
 
 			init();
-			initJmx();
 			getRuleManager().openPorts();
-
-			try {
-				if (hotDeploy)
-					startHotDeployment();
-			} catch (Exception e) {
-				shutdown();
-				throw e;
-			}
 
 			if (retryInitInterval > 0)
 				startAutoReinitializator();
@@ -285,67 +236,8 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 			throw new RuntimeException(e);
 		}
 
-		startJmx();
-
 		running = true;
 		log.info(Constants.PRODUCT_NAME + " " + Constants.VERSION + " up and running!");
-	}
-
-	private void startJmx() {
-		if(getBeanFactory() != null) {
-			try{
-				Object exporterObj = getBeanFactory().getBean(JmxExporter.JMX_EXPORTER_NAME);
-				if (exporterObj != null) {
-					((JmxExporter) exporterObj).initAfterBeansAdded();
-				}
-			}catch(NoSuchBeanDefinitionException ignored){
-				// If bean is not available, then dont start jmx
-			}
-		}
-	}
-
-	private void initJmx() {
-		if (beanFactory != null) {
-			try {
-				Object exporterObj = beanFactory.getBean(JmxExporter.JMX_EXPORTER_NAME);
-				if (exporterObj != null) {
-					JmxExporter exporter = (JmxExporter) exporterObj;
-					String prefix = "org.membrane-soa:00=routers, name=";
-					//exporter.removeBean(prefix + jmxRouterName);
-					exporter.addBean(prefix + jmxRouterName, new JmxRouter(this, exporter));
-				}
-			}catch(NoSuchBeanDefinitionException ignored){
-				// If bean is not available, then dont init jmx
-			}
-		}
-	}
-
-	private void startHotDeployment() {
-		if (hdt != null)
-			throw new IllegalStateException("Hot deployment already started.");
-		if (!(beanFactory instanceof TrackingApplicationContext))
-			throw new RuntimeException("ApplicationContext is not a TrackingApplicationContext. Please set <router hotDeploy=\"false\">.");
-		if (!(beanFactory instanceof AbstractRefreshableApplicationContext))
-			throw new RuntimeException("ApplicationContext is not a AbstractRefreshableApplicationContext. Please set <router hotDeploy=\"false\">.");
-		synchronized (hotDeployingContexts) {
-			if (hotDeployingContexts.contains(beanFactory))
-				return;
-			hotDeployingContexts.add(beanFactory);
-		}
-		hdt = new HotDeploymentThread((AbstractRefreshableApplicationContext) beanFactory);
-		hdt.setFiles(((TrackingApplicationContext) beanFactory).getFiles());
-		hdt.start();
-	}
-
-	private void stopHotDeployment() {
-		stopAutoReinitializator();
-		if (hdt != null) {
-			hdt.stopASAP();
-			hdt = null;
-			synchronized (hotDeployingContexts) {
-				hotDeployingContexts.remove(beanFactory);
-			}
-		}
 	}
 
 	private void startAutoReinitializator() {
@@ -394,11 +286,8 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 		}
 	}
 
-	@Override
 	public void stop() {
 		try {
-			if (hdt != null)
-				stopHotDeployment();
 			shutdown();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -406,41 +295,8 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 		running = false;
 	}
 
-	public void stopAll(){
-		for(String s : this.getBeanFactory().getBeanNamesForType(Router.class)){
-			((Router) this.getBeanFactory().getBean(s)).stop();
-		}
-	}
-
-	@Override
 	public boolean isRunning() {
 		return running;
-	}
-
-	/**
-	 * @description
-	 * <p>Whether changes to the router's configuration file should automatically trigger a restart.
-	 * </p>
-	 * <p>
-	 * Monitoring the router's configuration file <i>proxies.xml</i> is only possible, if the router
-	 * is created by a Spring Application Context which supports monitoring.
-	 * </p>
-	 * @default true
-	 * @param hotDeploy
-	 */
-	@MCAttribute
-	public void setHotDeploy(boolean hotDeploy) {
-		if (running) {
-			if (this.hotDeploy && !hotDeploy)
-				stopHotDeployment();
-			if (!this.hotDeploy && hotDeploy)
-				startHotDeployment();
-		}
-		this.hotDeploy = hotDeploy;
-	}
-
-	public boolean isHotDeploy() {
-		return hotDeploy;
 	}
 
 	public int getRetryInitInterval() {
@@ -470,10 +326,6 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 
 	public void setBaseLocation(String baseLocation) {
 		this.baseLocation = baseLocation;
-	}
-
-	public ApplicationContext getBeanFactory() {
-		return beanFactory;
 	}
 
 	public boolean isRetryInit() {
@@ -525,7 +377,6 @@ public class Router implements Lifecycle, ApplicationContextAware, BeanNameAware
 		return jmxRouterName;
 	}
 
-	@Override
 	public void setBeanName(String s) {
 		this.id = s;
 	}

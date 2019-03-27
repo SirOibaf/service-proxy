@@ -31,6 +31,7 @@ public class DecoupledEndpointRewriterInterceptor extends AbstractInterceptor {
 	}
 
 	private DecoupledEndpointRegistry getRegistry() {
-		return getRouter().getBeanFactory().getBean(DecoupledEndpointRegistry.class);
+		// return getRouter().getBeanFactory().getBean(DecoupledEndpointRegistry.class);
+		return null;
 	}
 }

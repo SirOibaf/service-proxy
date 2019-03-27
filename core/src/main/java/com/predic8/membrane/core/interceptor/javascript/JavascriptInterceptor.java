@@ -85,7 +85,7 @@ public class JavascriptInterceptor extends AbstractInterceptor {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("exc", exc);
         parameters.put("flow", flow);
-        parameters.put("spring", router.getBeanFactory());
+        //parameters.put("spring", router.getBeanFactory());
         addOutcomeObjects(parameters);
 
         parameters.putAll(implicitClasses);
@@ -134,7 +134,9 @@ public class JavascriptInterceptor extends AbstractInterceptor {
     private HashMap<String, Object> getHttpPackageClasses() throws IOException, ClassNotFoundException {
         String httpPackage = "com.predic8.membrane.core.http";
         HashMap<String, Object> result = new HashMap<>();
-        List<Class<?>> classes = ClassFinder.find(router.getBeanFactory().getClassLoader(), httpPackage);
+        // Commented out as we don't want to bring spring dependencies to Hopsworks
+        //List<Class<?>> classes = ClassFinder.find(router.getBeanFactory().getClassLoader(), httpPackage);
+        List<Class<?>> classes = new ArrayList<>();
         for(Class c : classes) {
             if(c.getPackage().getName().equals(httpPackage) && !c.getSimpleName().isEmpty())
                 result.put(c.getSimpleName(), c);

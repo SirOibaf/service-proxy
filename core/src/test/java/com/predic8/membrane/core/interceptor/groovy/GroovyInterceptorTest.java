@@ -31,7 +31,7 @@ public class GroovyInterceptorTest {
 	@Test
 	public void testRequest() throws Exception {
 		HttpRouter r = new HttpRouter();
-		r.setApplicationContext(applicationContext);
+//		r.setApplicationContext(applicationContext);
 		when(applicationContext.getBean("abc")).thenReturn("OK");
 
 		Exchange exc = new Exchange(null);

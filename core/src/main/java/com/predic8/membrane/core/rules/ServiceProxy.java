@@ -61,11 +61,6 @@ public class ServiceProxy extends AbstractServiceProxy {
 	}
 
 	public boolean etcdRegistryApiConfigExists(){
-		try {
-			if (router.getBeanFactory().getBean(EtcdRegistryApiConfig.class) != null)
-				return true;
-		}catch(Exception ignored){
-		}
 		return false;
 	}
 

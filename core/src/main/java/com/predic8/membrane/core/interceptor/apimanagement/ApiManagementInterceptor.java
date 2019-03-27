@@ -41,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @MCElement(name = "apiManagement")
@@ -60,7 +61,7 @@ public class ApiManagementInterceptor extends AbstractInterceptor {
     public void init(Router router) throws Exception {
         super.init(router);
 
-        Map<String, ApiConfig> apiConfigs = router.getBeanFactory().getBeansOfType(ApiConfig.class);
+        Map<String, ApiConfig> apiConfigs = new HashMap<>(); //router.getBeanFactory().getBeansOfType(ApiConfig.class);
         String etcdRegistryApiConfigCorrected = getCorrectedName(EtcdRegistryApiConfig.class.getSimpleName());
         String simpleApiConfigCorrected = getCorrectedName(SimpleApiConfig.class.getSimpleName());
 
