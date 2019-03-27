@@ -9,9 +9,9 @@
     <version>1.0</version>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.membrane-soa/membrane-service-proxy -->
+        <!-- https://mvnrepository.com/artifact/io.hops/membrane-service-proxy -->
         <dependency>
-            <groupId>org.membrane-soa</groupId>
+            <groupId>io.hops</groupId>
             <artifactId>membrane-service-proxy</artifactId>
             <version>4.4.2</version>
         </dependency>

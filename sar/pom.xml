@@ -20,7 +20,7 @@
 	<packaging>jboss-sar</packaging>
 
 	<parent>
-		<groupId>org.membrane-soa</groupId>
+		<groupId>io.hops</groupId>
 		<artifactId>service-proxy-parent</artifactId>
 		<relativePath>../pom.xml</relativePath>
 		<version>4.6.2</version>
@@ -28,7 +28,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.membrane-soa</groupId>
+			<groupId>io.hops</groupId>
 			<artifactId>service-proxy-core</artifactId>
 		</dependency>
 

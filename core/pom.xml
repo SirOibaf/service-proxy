@@ -20,7 +20,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>org.membrane-soa</groupId>
+		<groupId>io.hops</groupId>
 		<artifactId>service-proxy-parent</artifactId>
 		<relativePath>../pom.xml</relativePath>
 		<version>4.6.2</version>
@@ -28,7 +28,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.membrane-soa</groupId>
+			<groupId>io.hops</groupId>
 			<artifactId>service-proxy-annot</artifactId>
 		</dependency>
 		<dependency>
@@ -191,7 +191,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.membrane-soa</groupId>
+			<groupId>io.hops</groupId>
 			<artifactId>service-proxy-test</artifactId>
 			<scope>test</scope>
 		</dependency>

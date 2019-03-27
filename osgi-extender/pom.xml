@@ -20,7 +20,7 @@
 	<packaging>bundle</packaging>
 
 	<parent>
-		<groupId>org.membrane-soa</groupId>
+		<groupId>io.hops</groupId>
 		<artifactId>service-proxy-parent</artifactId>
 		<relativePath>../pom.xml</relativePath>
 		<version>4.6.2</version>
@@ -39,7 +39,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.membrane-soa</groupId>
+			<groupId>io.hops</groupId>
 			<artifactId>service-proxy-annot</artifactId>
 			<exclusions>
 				<exclusion>
@@ -53,7 +53,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.membrane-soa</groupId>
+			<groupId>io.hops</groupId>
 			<artifactId>service-proxy-core</artifactId>
 		</dependency>
 		<dependency>
