@@ -743,8 +743,8 @@
 	<distributionManagement>
 		<repository>
 			<id>Hops</id>
-			<name>Hops repo</name>
-			<url>https://bbc1.sics.se/archiva/repository/hops/</url>
+			<name>Hops Repo</name>
+			<url>https://bbc1.sics.se/archiva/repository/Hops/</url>
 		</repository>
 	</distributionManagement>
 </project>
